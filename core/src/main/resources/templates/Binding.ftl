@@ -32,11 +32,16 @@ public class ${bindingName} extends SOAPBinding
             bodyElements.put("${param.type}", ${param.name});
         }
         </#list>
+        
+        String action = "";
+        <#if bOp.action??>
+        action = "${bOp.action}";
+        </#if>
 
         <#if bOp.return = "void">
         makeRequest(bodyElements);
         <#else>
-        SOAPEnvelope env = makeRequest(bodyElements);  
+        SOAPEnvelope env = makeRequest(bodyElements, action);  
         ${bOp.return} rtrn = null;
         for(Object o : env.bodyElements)
         {

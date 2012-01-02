@@ -44,7 +44,9 @@ public class ${typeName} extends SOAPObject
         <#list elements as element>
         if(${element.name} != null)
         {
-            xml.attribute(null, "${element.name}", ${element.name}.toString());
+            xml.startTag(getNamespace(),  "${element.name}");
+            xml.text(${element.name}.toString());
+            xml.endTag(getNamespace(), "${element.name}");
         }
         </#list>
         </#if>

@@ -10,6 +10,8 @@ import javax.wsdl.factory.*;
 import javax.wsdl.xml.*;
 import javax.wsdl.extensions.*;
 import javax.wsdl.extensions.schema.*;
+import javax.wsdl.extensions.soap.SOAPOperation;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
@@ -263,6 +265,19 @@ public class WSDL2Android
         Message inMsg = op.getInput().getMessage();
         Message outMsg = op.getOutput().getMessage();
         
+        List<?> extensions = bOp.getExtensibilityElements();
+        if (extensions != null) {
+            for ( Object o : extensions )
+            {
+            	ExtensibilityElement extElement = (ExtensibilityElement)o;
+                if (extElement instanceof SOAPOperation) {
+                    SOAPOperation soapOp = (SOAPOperation) extElement;               
+                    rtrn.put("action", soapOp.getSoapActionURI().toString());
+                    break;
+                }
+            }
+        }
+ 
         rtrn.put("name", op.getName());
 
         Part[] oParts = (Part[]) outMsg.getParts().values().toArray(new Part[0]);

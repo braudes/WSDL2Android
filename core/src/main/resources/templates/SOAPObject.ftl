@@ -22,7 +22,8 @@ public class SOAPObject
 
         xml.startTag(ns, name);
         addAttributesToNode(xml);
-
+        addElementsToNode(xml);
+        
         xml.endTag(ns, name);
     }
 

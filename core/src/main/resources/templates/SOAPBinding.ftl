@@ -83,7 +83,7 @@ public abstract class SOAPBinding
         }
     }
 
-    public SOAPEnvelope makeRequest(Map<String, SOAPObject> bodyElements)
+    public SOAPEnvelope makeRequest(Map<String, SOAPObject> bodyElements, String action)
         throws IOException
     {
         String envelope = buildEnvelope(bodyElements);
@@ -92,7 +92,7 @@ public abstract class SOAPBinding
             Log.d(logTag, "Request: \n" + envelope);
         }
 
-        String response = sendXmlToServer(envelope, "login");
+        String response = sendXmlToServer(envelope, action);
 
         ResponseParser respParser = new ResponseParser(response);
         if(isLogEnabled())

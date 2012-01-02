@@ -46,12 +46,12 @@ public class SOAPEnvelope extends SOAPObject
             xml.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
             xml.startTag(NS_SOAP_ENVELOPE, TAG_ENVELOPE);
 
-            xml.startTag(NS_SOAP_ENVELOPE, TAG_HEADER);
             if(headerElements != null)
             {
+            	xml.startTag(NS_SOAP_ENVELOPE, TAG_HEADER);
                 //TODO Add header elements
+                xml.endTag(NS_SOAP_ENVELOPE, TAG_HEADER);
             }
-            xml.endTag(NS_SOAP_ENVELOPE, TAG_HEADER);
 
             xml.startTag(NS_SOAP_ENVELOPE, TAG_BODY);
 
