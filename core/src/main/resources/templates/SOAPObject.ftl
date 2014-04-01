@@ -23,7 +23,6 @@ public class SOAPObject
         xml.startTag(ns, name);
         addAttributesToNode(xml);
         addElementsToNode(xml);
-        
         xml.endTag(ns, name);
     }
 
@@ -95,7 +94,36 @@ public class SOAPObject
         }
         else
         {
-            rtrn = parsePrimitive(rtrn, el.getTextContent());
+            rtrn = parsePrimitive(field.getDeclaringClass(), el.getTextContent());
+        }
+        
+        return rtrn;
+    }
+
+    public static Object parseElement(SOAPBinding binding, Element el, Object parent, 
+            Class clazz)
+    {
+        Object rtrn = null;
+
+        if(parent == null)
+        {
+            return rtrn;
+        }
+
+        if(SOAPObject.class.isAssignableFrom(clazz))
+        {
+            try {
+                rtrn = clazz.newInstance();
+                ((SOAPObject) rtrn).parse(binding, el);
+            } catch (Exception e) {
+                Log.e(binding.getLogTag(), "Could not create new instance of '"
+                        + clazz.getName() + "' on class '" 
+                        + parent.getClass().getSimpleName() + "'.");
+            }
+        }
+        else
+        {
+            rtrn = parsePrimitive(clazz, el.getTextContent());
         }
         
         return rtrn;
@@ -143,36 +171,36 @@ public class SOAPObject
             return rtrn;
         }
 
-        return parsePrimitive(rtrn, attValue);
+        return parsePrimitive(field.getDeclaringClass(), attValue);
     }
     
-    private static Object parsePrimitive(Object o, String value)
+    private static Object parsePrimitive(Class clazz, String value)
     {
         Object rtrn = null;
 
-        if(o instanceof String)
+        if(String.class.isAssignableFrom(clazz))
         {
             rtrn = value;
         }
-        else if(o instanceof Double)
+        else if(Double.class.isAssignableFrom(clazz))
         {
-            rtrn = new Double(value);
+            rtrn = Double.valueOf(value);
         }
-        else if(o instanceof Integer)
+        else if(Integer.class.isAssignableFrom(clazz))
         {
-            rtrn = new Integer(value);
+            rtrn = Integer.valueOf(value);
         }
-        else if(o instanceof Long)
+        else if(Long.class.isAssignableFrom(clazz))
         {
-            rtrn = new Long(value);
+            rtrn = Long.valueOf(value);
         }
-        else if(o instanceof Short)
+        else if(Short.class.isAssignableFrom(clazz))
         {
-            rtrn = new Short(value);
+            rtrn = Short.valueOf(value);
         }
-        else if(o instanceof Float)
+        else if(Float.class.isAssignableFrom(clazz))
         {
-            rtrn = new Float(value);
+            rtrn = Float.valueOf(value);
         }
         //Byte, Calendar, Byte[], BigDecimal, QName, URI
         //...etc...

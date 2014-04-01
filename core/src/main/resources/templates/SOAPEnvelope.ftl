@@ -15,9 +15,9 @@ import java.util.ArrayList;
 public class SOAPEnvelope extends SOAPObject
 {
     public static final String NS_SOAP_ENVELOPE = "http://schemas.xmlsoap.org/soap/envelope/";
-    private static final String NS_XSL_TRANSFORM = "http://www.w3.org/1999/XSL/Transform";
-    private static final String NS_XML_SCHEMA_INSTANCE = "http://www.w3.org/2001/XMLSchema-instance";
-    private static final String NS_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
+    public static final String NS_XSL_TRANSFORM = "http://www.w3.org/1999/XSL/Transform";
+    public static final String NS_XML_SCHEMA_INSTANCE = "http://www.w3.org/2001/XMLSchema-instance";
+    public static final String NS_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
 
     private static final String TAG_ENVELOPE = "Envelope";
     private static final String TAG_BODY = "Body";

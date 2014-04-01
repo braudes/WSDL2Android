@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ${typeName} extends SOAPObject 
 {
@@ -17,7 +19,11 @@ public class ${typeName} extends SOAPObject
 
     <#if elements??>
     <#list elements as element>
-    public ${element.javaType} ${element.name} = null;
+    <#if element.maxOccurs != 1>
+    public List<${element.javaType}> _${element.name} = new ArrayList<${element.javaType}>();
+    <#else>
+    public ${element.javaType} _${element.name} = null;
+    </#if>
     </#list>
     </#if>
 
@@ -42,11 +48,18 @@ public class ${typeName} extends SOAPObject
     {
         <#if elements??>
         <#list elements as element>
-        if(${element.name} != null)
+        if(_${element.name} != null)
         {
-            xml.startTag(getNamespace(),  "${element.name}");
-            xml.text(${element.name}.toString());
-            xml.endTag(getNamespace(), "${element.name}");
+        <#if element.maxOccurs != 1>
+            for (${element.javaType} obj : _${element.name}) {
+                xml.attribute(null, "${element.name}", obj.toString());
+            }
+        <#else>
+            xml.startTag(null,  "${element.name}");
+            xml.attribute(SOAPEnvelope.NS_XML_SCHEMA_INSTANCE,"type","xsd:${element.localPart}");
+            xml.text(_${element.name}.toString());
+            xml.endTag(null, "${element.name}");
+        </#if>
         }
         </#list>
         </#if>
@@ -70,13 +83,20 @@ public class ${typeName} extends SOAPObject
             {
                 continue;
             }
-
             Element childEl = (Element) childNde;
             <#list elements as element>
+            <#if element.maxOccurs != 1>
             if(childEl.getLocalName().equals("${element.name}"))
             {
-                ${element.name} = (${element.javaType}) parseElement(binding, childEl, this, "${element.name}"); 
+                ${element.javaType} _obj = (${element.javaType}) parseElement(binding, childEl, this, ${element.javaType}.class);
+                _${element.name}.add(_obj); 
             }
+            <#else>
+            if(childEl.getLocalName().equals("${element.name}"))
+            {
+                _${element.name} = (${element.javaType}) parseElement(binding, childEl, this, ${element.javaType}.class); 
+            }
+            </#if>
             </#list>
         }
         </#if>
