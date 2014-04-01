@@ -405,7 +405,7 @@ public class WSDL2Android
             else
             {
                 typeName = buildTypeName(getPrefix(qName.getNamespaceURI()), qName.getLocalPart());
-            }                    
+            }
         }
 
         if(typeName == null || typeName.equals(""))
@@ -438,6 +438,7 @@ public class WSDL2Android
     {
         Map<String, Object> elModel = new HashMap<String, Object>();
         elModel.put("name", el.getName());
+        elModel.put("localPart", el.getSchemaTypeName().getLocalPart());
         /*
         System.out.println("--" + el.getName() + "--");
         System.out.println("qname: " + el.getQName());
@@ -448,7 +449,8 @@ public class WSDL2Android
 
         //It looks like the schema type name gives you the right type.
         elModel.put("javaType", getTypeFromQName(el.getSchemaTypeName()));
-
+        elModel.put("minOccurs", el.getMinOccurs());
+        elModel.put("maxOccurs", el.getMaxOccurs());
         return elModel;
     }
 
